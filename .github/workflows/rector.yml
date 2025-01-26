@@ -1,4 +1,4 @@
-name: Rector CI
+name: Rector (Instant Upgrades and Automated Refactoring)
 
 on:
   push:
