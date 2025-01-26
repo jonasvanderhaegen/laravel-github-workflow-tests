@@ -1,31 +1,36 @@
-name: Fix Code Style
+name: Laravel Pint
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  lint:
+  laravel-pint:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        php: [8.2, 8.3, 8.4]
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
-          extensions: json, dom, curl, libxml, mbstring
-          coverage: none
+          ref: ${{ github.head_ref }}
 
-      - name: Install Pint
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.3'
+          php-extensions: 'json, dom, curl, libxml, mbstring'
+
+      - name: Install Laravel Pint
         run: composer global require laravel/pint
 
       - name: Run Pint
         run: pint
 
-      - name: Commit linted files
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Push Changes Back to Repo
+        run: |
+          git config user.name "gh-actions"
+          git config user.email "gh@example.com"
+          git add .
+          git commit -m "Laravel Pint" || exit 0
+          git push
