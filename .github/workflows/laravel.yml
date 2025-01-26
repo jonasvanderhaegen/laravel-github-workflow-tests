@@ -68,12 +68,6 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: php artisan db:seed --force
 
-    - name: Seed Shipments Module
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: php artisan module:seed Shipments --force
-
     - name: Run Tests
       env:
         DB_CONNECTION: sqlite
