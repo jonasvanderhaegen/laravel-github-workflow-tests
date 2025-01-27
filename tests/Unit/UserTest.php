@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-// use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -16,7 +15,7 @@ class UserTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function it_can_create_a_user()
+    public function test_it_can_create_a_user()
     {
         $user = User::factory()->create([
             'name' => 'John Doe',
