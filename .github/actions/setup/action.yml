@@ -1,6 +1,6 @@
 name: Setup
 
-description: Sets up PHP and Composer
+description: Sets up PHP, Composer, and npm
 
 inputs:
   php-version:
@@ -32,7 +32,7 @@ runs:
         extensions: ${{ inputs.php-extensions }}
         key: php-extensions-${{ steps.get-cache-hash.outputs.hash }}
 
-    - name: Cache extensions
+    - name: Cache PHP extensions
       if: ${{ inputs.php-extensions != '' }}
       uses: actions/cache@v4
       with:
@@ -48,14 +48,26 @@ runs:
         tools: composer:v2
         coverage: ${{ inputs.coverage }}
 
-    - name: Get Composer cache dir
+    - name: Get Composer cache directory
       id: composer-cache-dir
       run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: Cache dependencies
+    - name: Cache Composer dependencies
       uses: actions/cache@v4
       with:
         key: composer-cache-${{ hashFiles('**/composer.lock') }}
         path: ${{ steps.composer-cache-dir.outputs.dir }}
         restore-keys: composer-cache-
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Cache npm dependencies
+      uses: actions/cache@v4
+      with:
+        key: npm-cache-${{ hashFiles('**/package-lock.json') }}
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        restore-keys: npm-cache-
